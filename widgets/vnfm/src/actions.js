@@ -9,10 +9,10 @@ export default class Actions {
     }
 
     doCreate(name,params) {
-        return this.toolbox.getManager().doPut(`/vims/${name}`, null, params);
+        return this.toolbox.getManager().doPut(`/vnfms/${name}`, null, params);
     }
     doDelete(name) {
-        return this.toolbox.getManager().doDelete('/vims/' + name);
+        return this.toolbox.getManager().doDelete('/vnfms/' + name);
     }
     doActivate(name) {
         let url = `/vims/${name}/command?action=active`;
@@ -22,7 +22,7 @@ export default class Actions {
         return this.toolbox.getManager().doGet('/plugins?_include=id,package_name');
     }
     doDeactivate(name) {
-        let url = `/vims/${name}/command?action=deactive`;
+        let url = `/vnfms/${name}/command?action=deactive`;
         return this.toolbox.getManager().doPatch(url);
     }
 

@@ -70,7 +70,7 @@
     "allowedModules": ["lodash", "body/json"]
   },
   "ssl": {
-    "ca": "e:/cloudify_internal_ca_cert.pem"
+    "ca": "/etc/cloudify/ssl/cloudify_internal_ca_cert.pem"
   },
   "saml":{
     "enabled": false,

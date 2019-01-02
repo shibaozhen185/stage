@@ -35,11 +35,14 @@ export default class CreateModal extends React.Component {
         if (_.isEmpty(this.state.name)) {
             errors['name'] = '请输入vnfm名称';
         }
-        if (_.isEmpty(this.state.project_name)) {
+        if (_.isEmpty(this.state.ip)) {
             errors['ip'] = 'ip';
         }
         if (_.isEmpty(this.state.username)) {
             errors['username'] = '请输入用户名';
+        }
+		if (_.isEmpty(this.state.vendor)) {
+            errors['vendor'] = '请输入厂商';
         }
         
        
@@ -51,10 +54,14 @@ export default class CreateModal extends React.Component {
         }
 
         let params= {};
-        params.type = this.state.type;
+        params.type = 'ceshi';
+        params.vendor = this.state.vendor;
+        params.ip = this.state.ip;
+        params.username = this.state.username;
         let inputs ={};
         inputs.username = this.state.username;
         inputs.ip = this.state.ip;
+		inputs.vendor = this.state.vendor;
         params.inputs = JSON.stringify(inputs);
         // Disable the form
         this.setState({loading: true});
@@ -100,6 +107,10 @@ export default class CreateModal extends React.Component {
                         <Form.Field error={this.state.errors.ip}>
                             <Form.Input name='ip' placeholder="ip"
                                         value={this.state.ip} onChange={this._handleInputChange.bind(this)}/>
+                        </Form.Field>
+                        <Form.Field error={this.state.errors.ip}>
+                            <Form.Input name='vendor' placeholder="厂商"
+                                        value={this.state.vendor} onChange={this._handleInputChange.bind(this)}/>
                         </Form.Field>
                     </Form>
                 </Modal.Content>

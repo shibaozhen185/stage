@@ -11,7 +11,7 @@ Stage.defineWidget({
     initialWidth: 5,
     initialHeight: 16,
     color: 'brown',
-    fetchUrl: '[manager]/vims[params]',
+    fetchUrl: '[manager]/vnfms[params]',
     isReact: true,
     permission: Stage.GenericConfig.WIDGET_PERMISSION('vnfm'),
     categories: [Stage.GenericConfig.CATEGORY.SYSTEM_RESOURCES],
