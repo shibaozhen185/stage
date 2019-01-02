@@ -1,0 +1,74 @@
+{
+		"widgets": [  {
+			"definition": "timeFilter",
+			"name": "时间过滤器",
+			"drillDownPages": {},
+			"height": 6,
+			"width": 12,
+			"y": 0,
+			"x": 0,
+			"configuration": {}
+		}, {
+			"definition": "graph",
+			"name": "CPU",
+			"drillDownPages": {},
+			"height": 14,
+			"width": 4,
+			"maximized": false,
+			"y": 7,
+			"x": 0,
+			"configuration": {
+				"from": "now() - 15m",
+				"pollingTime": 5,
+				"resolution": 1,
+				"metric": "cpu_total_system",
+				"label": null,
+				"to": "now()",
+				"deploymentId": "rvm",
+				"query": null,
+				"type": "line",
+				"unit": "m"
+			}
+		}, {
+			"definition": "graph",
+			"name": "内存",
+			"drillDownPages": {},
+			"height": 14,
+			"width": 4,
+			"y": 7,
+			"x": 4,
+			"configuration": {
+				"from": "now() - 1h",
+				"pollingTime": 5,
+				"resolution": 1,
+				"metric": "memory_MemFree",
+				"label": null,
+				"to": "now()",
+				"deploymentId": "rvm",
+				"query": "",
+				"type": "line",
+				"unit": "m"
+			}
+		}, {
+			"definition": "graph",
+			"name": "pppoe",
+			"drillDownPages": {},
+			"height": 14,
+			"width": 4,
+			"y": 7,
+			"x": 8,
+			"configuration": {
+				"from": "now() - 15m",
+				"pollingTime": 20,
+				"resolution": 1,
+				"metric": "vbras_pppoe",
+				"label": null,
+				"to": "now()",
+				"deploymentId": "rvm",
+				"query": null,
+				"type": "line",
+				"unit": "m"
+			}
+		}],
+		"name": "性能统计"
+	}

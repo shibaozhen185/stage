@@ -1,0 +1,19 @@
+    {
+            "isDrillDown": true,
+            "widgets": [
+                {
+                    "definition": "vnfm",
+                    "name": "VNFM",
+                    "height": 20,
+                    "width": 12,
+                    "y": 0,
+                    "x": 0,
+                    "configuration": {
+                        "pollingTime": 30,
+                        "pageSize": 5,
+                        "sortAscending": true
+                    }
+                }
+            ],
+            "name": "VNFM列表"
+        }

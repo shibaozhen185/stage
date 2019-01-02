@@ -1,0 +1,25 @@
+  {
+            "description": "",
+            "parent": "0",
+            "isDrillDown": true,
+            "widgets": [
+                {
+                    "definition": "deployments",
+                    "name": "部署管理",
+                    "drillDownPages": {},
+                    "height": 27,
+                    "width": 12,
+                    "y": 0,
+                    "x": 0,
+                    "configuration": {
+                        "pollingTime": 2,
+                        "clickToDrillDown": true,
+                        "sortAscending": null,
+                        "blueprintIdFilter": null,
+                        "pageSize": 5,
+                        "displayStyle": "table"
+                    }
+                }
+            ],
+            "name": "部署管理"
+        }

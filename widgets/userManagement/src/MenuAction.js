@@ -1,0 +1,39 @@
+/**
+ * Created by kinneretzin on 19/10/2016.
+ */
+
+export default class MenuAction extends React.Component {
+
+    static SET_PASSWORD_ACTION='password';
+    static SET_ROLE_ACTION='role';
+    static EDIT_TENANTS_ACTION='tenants';
+    static EDIT_GROUPS_ACTION='groups';
+    static DELETE_ACTION='delete';
+    static DEACTIVATE_ACTION = 'deactivate';
+    static ACTIVATE_ACTION = 'activate';
+
+    _actionClick(proxy, {name}) {
+        this.props.onSelectAction(name, this.props.item);
+    }
+
+    render () {
+        var {PopupMenu, Menu} = Stage.Basic;
+
+        return (
+            <PopupMenu>
+                <Menu pointing vertical>
+                    <Menu.Item icon='lock' content='设置密码' name={MenuAction.SET_PASSWORD_ACTION}
+                               onClick={this._actionClick.bind(this)}/>
+                    <Menu.Item icon='male' content='设置角色' name={MenuAction.SET_ROLE_ACTION}
+                               onClick={this._actionClick.bind(this)}/>
+                    <Menu.Item icon='users' content="编辑用户组" name={MenuAction.EDIT_GROUPS_ACTION}
+                               onClick={this._actionClick.bind(this)}/>
+                    <Menu.Item icon='user' content="编辑用户租户" name={MenuAction.EDIT_TENANTS_ACTION}
+                               onClick={this._actionClick.bind(this)}/>
+                    <Menu.Item icon='trash' content='删除' name={MenuAction.DELETE_ACTION}
+                               onClick={this._actionClick.bind(this)}/>
+                </Menu>
+            </PopupMenu>
+        );
+    }
+}

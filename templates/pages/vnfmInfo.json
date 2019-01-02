@@ -1,0 +1,19 @@
+{
+  "name": "VNFM管理",
+  "widgets": [
+	{
+           "definition": "vnf", 
+            "name": "VNF管理", 
+            "drillDownPages": { }, 
+            "height": 24, 
+            "width": 12, 
+             "y": 0, 
+             "x": 0, 
+             "configuration": {
+                  "pollingTime": 30, 
+                  "pageSize": 5, 
+                  "displayStyle": "list"
+             }
+        }
+    ]
+}

@@ -1,0 +1,33 @@
+{
+	"widgets": [{
+		"definition": "composerLink",
+		"name": "图形化创建模板",
+		"drillDownPages": {},
+		"y": 0,
+		"x": 0,
+		"configuration": {},
+		"id": "993de849-3f7a-4169-881c-cc73f077ceb9"
+	}, {
+		"definition": "blueprints",
+		"name": "模版管理",
+		"drillDownPages": {
+			"模版": "aa4bdfad-5e5f-48c5-8072-7ed1b92cc8ff"
+		},
+		"height": 23,
+		"width": 12,
+		"maximized": false,
+		"y": 4,
+		"x": 0,
+		"configuration": {
+			"sortColumn": "created_at",
+			"pollingTime": 2,
+			"pageSize": 5,
+			"sortAscending": null,
+			"clickToDrillDown": true,
+			"displayStyle": "table"
+		},
+		"id": "91e0aa62-ffc3-4b2f-bc3d-4e0fecaa26a0"
+	}],
+	"description": "网络业务模板，可上传或创建新模板",
+	"name": "模版管理"
+}

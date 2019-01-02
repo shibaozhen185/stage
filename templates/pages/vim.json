@@ -1,0 +1,16 @@
+{
+		"widgets": [{
+			"definition": "vim",
+			"name": "VIM管理",
+			"height": 38,
+			"width": 12,
+			"y": 0,
+			"x": 0,
+			"configuration": {
+				"pollingTime": 30,
+				"sortAscending": true
+			}
+		}],
+		"description": "云基础设施管理",
+		"name": "VIM管理"
+	}

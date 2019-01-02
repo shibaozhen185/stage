@@ -1,0 +1,17 @@
+{
+  "widgets": [{
+    "definition": "vpnNum",
+    "name": "计费系统",
+    "height": 26,
+    "width": 12,
+    "y": 0,
+    "x": 0,
+    "configuration": {
+      "pollingTime": 5,
+      "pageSize": 5,
+      "sortAscending": true
+    }
+  }],
+  "description": "计费系统",
+  "name": "计费系统"
+}

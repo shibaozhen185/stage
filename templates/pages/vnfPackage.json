@@ -1,0 +1,17 @@
+{
+		"widgets": [{
+			"definition": "vnfPackage",
+			"name": "VNF包管理",
+			"drillDownPages": {},
+			"height": 23,
+			"width": 12,
+			"y": 0,
+			"x": 0,
+			"configuration": {
+				"pollingTime": 30,
+				"pageSize": 5
+			}
+		}],
+		"name": "VNF包管理",
+		"description": "网元软件包管理"
+	}

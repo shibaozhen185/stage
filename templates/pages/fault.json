@@ -1,0 +1,19 @@
+ {
+		"widgets": [{
+			"definition": "fault",
+			"name": "故障管理",
+			"drillDownPages": {},
+			"height": 28,
+			"width": 12,
+			"y": 0,
+			"x": 0,
+			"configuration": {
+				"sortAscending": null,
+				"pollingTime": 10,
+				"pageSize": 5,
+				"displayStyle": "table"
+			}
+		}],
+		"description": "",
+		"name": "故障管理"
+	}

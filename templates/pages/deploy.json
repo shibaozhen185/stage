@@ -1,0 +1,31 @@
+{
+  "name": "实例化管理",
+  "widgets": [
+    {
+      "name": "部署操作按钮",
+      "definition": "deploymentButton",
+      "x": 0,
+      "y": 0
+    },
+    {
+      "name": "过滤器",
+      "definition": "filter",
+      "x": 0,
+      "y": 4,
+      "configuration": {
+        "filterByExecutions":false
+      }
+    },
+    {
+      "name": "部署管理",
+      "width": 12,
+      "height": 36,
+      "definition": "deployments",
+      "x": 0,
+      "y": 8,
+      "configuration":{
+        "displayStyle":"list"
+      }
+    }
+  ]
+}

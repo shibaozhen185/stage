@@ -1,0 +1,22 @@
+{
+            "description": "",
+            "isDrillDown": true,
+            "widgets": [
+                {
+                    "definition": "vim",
+                    "name": "VIM管理",
+                    "drillDownPages": {},
+                    "height": 26,
+                    "width": 12,
+                    "y": 0,
+                    "x": 0,
+                    "configuration": {
+                        "sortColumn": "name",
+                        "pollingTime": 30,
+                        "pageSize": 5,
+                        "sortAscending": true
+                    }
+                }
+            ],
+            "name": "VIM管理"
+        }

@@ -1,0 +1,20 @@
+{
+            "parent": "0",
+            "isDrillDown": true,
+            "widgets": [
+                {
+                    "definition": "plugins",
+                    "name": "插件管理",
+                    "drillDownPages": {},
+                    "height": 22,
+                    "width": 12,
+                    "y": 0,
+                    "x": 0,
+                    "configuration": {
+                        "pollingTime": 30,
+                        "pageSize": 5
+                    }
+                }
+            ],
+            "name": "插件管理"
+        }

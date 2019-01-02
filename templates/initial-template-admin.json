@@ -1,0 +1,14 @@
+[
+  "adminDash",
+  "blueprintManager",
+  "deploy",
+  "vnfPackage",
+  "vim",
+  "vnfmManager",
+  "per",
+  "policy",
+  "systemResources-admin",
+  "fault",
+  "tmm",
+  "vpnNum"
+]

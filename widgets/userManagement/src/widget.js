@@ -1,0 +1,58 @@
+/**
+ * Created by pposel on 30/01/2017.
+ */
+
+import UsersTable from './UsersTable';
+
+Stage.defineWidget({
+    id: 'userManagement',
+    name: '用户管理',
+    description: '对系统中用户统一管理',
+    initialWidth: 5,
+    initialHeight: 16,
+    color: 'brown',
+    fetchUrl: {
+        users: '[manager]/users?_get_data=true[params]'
+    },
+    isReact: true,
+    permission: Stage.GenericConfig.WIDGET_PERMISSION('userManagement'),
+    categories: [Stage.GenericConfig.CATEGORY.SYSTEM_RESOURCES],
+
+    initialConfiguration: [
+        Stage.GenericConfig.POLLING_TIME_CONFIG(30),
+        Stage.GenericConfig.PAGE_SIZE_CONFIG(),
+        Stage.GenericConfig.SORT_COLUMN_CONFIG('username'),
+        Stage.GenericConfig.SORT_ASCENDING_CONFIG(true)
+    ],
+
+    render: function(widget, data, error, toolbox) {
+        if (_.isEmpty(data)) {
+            return <Stage.Basic.Loading/>;
+        }
+        console.log('usermanager data');
+        console.log(data);
+
+        var selectedUser = toolbox.getContext().getValue('userName');
+
+        let formattedData = data.users;
+        formattedData = Object.assign({}, data.users, {
+            items: _.map (formattedData.items, (item) => {
+                return Object.assign({}, item, {
+                    last_login_at: item.last_login_at?Stage.Utils.formatTimestamp(item.last_login_at):"",
+                    groupCount: item.groups.length,
+                    tenantCount: _.size(item.tenants),
+                    isSelected: item.username === selectedUser
+                })
+            }),
+            total : _.get(data.users, 'metadata.pagination.total', 0)
+        });
+
+        var roles = _.map (toolbox.getManager().getSystemRoles(), (role) => {
+            return {text: role.description ? `${role.name} - ${role.description}` : role.name, value: role.name};
+        });
+
+        return (
+            <UsersTable widget={widget} data={formattedData} roles={roles} toolbox={toolbox}/>
+        );
+    }
+});

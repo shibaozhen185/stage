@@ -1,0 +1,17 @@
+{
+		"widgets": [{
+			"definition": "vnfm",
+			"name": "VNFM管理",
+			"height": 26,
+			"width": 12,
+			"y": 0,
+			"x": 0,
+			"configuration": {
+				"pollingTime": 30,
+				"pageSize": 5,
+				"sortAscending": true
+			}
+		}],
+		"description": "厂商VNFM的注册和激活去激活",
+		"name": "VNFM管理"
+	}

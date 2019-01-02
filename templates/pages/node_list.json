@@ -1,0 +1,32 @@
+{
+            "description": "",
+            "parent": "0",
+            "isDrillDown": true,
+            "widgets": [
+                {
+                    "definition": "nodes",
+                    "name": "节点",
+                    "height": 26,
+                    "width": 12,
+                    "y": 0,
+                    "x": 0,
+                    "configuration": {
+                        "fieldsToShow": [
+                            "Name",
+                            "Type",
+                            "Blueprint",
+                            "Deployment",
+                            "Contained in",
+                            "Connected to",
+                            "Host",
+                            "Creator",
+                            "# Instances",
+                            "Groups"
+                        ],
+                        "pollingTime": 10,
+                        "pageSize": 5
+                    }
+                }
+            ],
+            "name": "节点"
+        }

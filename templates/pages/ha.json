@@ -1,0 +1,13 @@
+{
+  "name": "高可用性管理",
+  "widgets": [
+    {
+      "name": "集群管理",
+      "definition": "highAvailability",
+      "width": 12,
+      "height": 24,
+      "x": 0,
+      "y": 0
+    }
+  ]
+}

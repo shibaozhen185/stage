@@ -1,0 +1,256 @@
+/**
+ * Created by kinneretzin on 08/09/2016.
+ */
+
+import fetch from 'isomorphic-fetch'
+import Internal from './Internal'
+import ScriptLoader from './scriptLoader';
+import StyleLoader from './StyleLoader';
+
+var ReactDOMServer = require('react-dom/server');
+
+import 'd3';
+import momentImport from 'moment';
+import markdownImport from 'markdown';
+
+import 'cloudify-blueprint-topology';
+
+import * as BasicComponents from '../components/basic';
+import StageUtils from './stageUtils';
+import Consts from './consts';
+import Pagination from '../components/basic/pagination/Pagination';
+
+import WidgetDefinition from './WidgetDefinition';
+var widgetDefinitions = [];
+
+function fetchWidgetTemplate(path) {
+    return fetch(StageUtils.url(path))
+        .then((response)=>{
+            if (response.status >= 400) {
+                console.error(response.statusText);
+                return;
+            }
+            return response.text();
+        });
+}
+
+export default class WidgetDefinitionsLoader {
+    static init() {
+        window.Stage = {
+            defineWidget: (widgetDefinition)=> {
+                widgetDefinitions.push(new WidgetDefinition({...widgetDefinition, id: document.currentScript.id}));
+            },
+            Basic: BasicComponents,
+            ComponentToHtmlString: (component)=>{
+                return ReactDOMServer.renderToString(component);
+            },
+            GenericConfig,
+            Common: [],
+            defineCommon: (def) =>{
+                Stage.Common[def.name] = def.common;
+            },
+            Utils: StageUtils
+        };
+        
+        window.moment = momentImport;
+        window.markdown = markdownImport;
+    }
+
+    static _loadWidgets(manager) {
+        console.log('Load widgets');
+
+        var internal = new Internal(manager);
+        return Promise.all([
+                new ScriptLoader('/widgets/common/common.js').load(), // Commons has to load before the widgets
+                internal.doGet('/widgets/list') // We can load the list of widgets in the meanwhile
+            ])
+            .then((results)=> {
+                var data = results[1]; // widgets data
+                var promises = [];
+                data.forEach((item)=>{
+                    promises.push(WidgetDefinitionsLoader._loadWidget(item, false));
+                });
+
+                var output = _.keyBy(data, 'id');
+                return Promise.all(promises).then(() => output);
+            });
+    }
+
+    static _loadWidget(widget, rejectOnError) {
+        var scriptPath = `${widget.isCustom ? Consts.USER_DATA_PATH : ''}/widgets/${widget.id}/widget.js`;
+        return new ScriptLoader(scriptPath).load(widget.id, rejectOnError);
+    }
+
+    static _loadWidgetsResources(widgets) {
+        console.log('Load widgets resources');
+
+        var promises = [];
+        widgetDefinitions.forEach((widgetDefinition)=> {
+            //Mark system widgets to protect against uninstalling
+            widgetDefinition.isCustom = widgets[widgetDefinition.id].isCustom;
+
+            if (widgetDefinition.hasTemplate) {
+                promises.push(
+                    fetchWidgetTemplate(`${widgetDefinition.isCustom ? Consts.USER_DATA_PATH : ''}/widgets/${widgetDefinition.id}/widget.html`)
+                        .then((widgetHtml)=> {
+                            if (widgetHtml) {
+                                widgetDefinition.template = widgetHtml;
+                            }
+                        }));
+            }
+            if (widgetDefinition.hasStyle) {
+                promises.push(new StyleLoader(`${widgetDefinition.isCustom ? Consts.USER_DATA_PATH : ''}/widgets/${widgetDefinition.id}/widget.css`).load());
+            }
+        });
+
+        return Promise.all(promises);
+    }
+
+    static _initWidgets() {
+        console.log('Init widgets');
+
+        _.each(widgetDefinitions,w=>{
+            if (w.init && typeof w.init === 'function') {
+                w.init();
+            }
+        })
+
+        var loadedWidgetDefinitions = _.sortBy(widgetDefinitions, ['name']);
+        widgetDefinitions = []; // Clear for next time
+
+        return Promise.resolve(loadedWidgetDefinitions);
+    }
+
+    static load(manager) {
+        return WidgetDefinitionsLoader._loadWidgets(manager)
+            .then((widgets) => WidgetDefinitionsLoader._loadWidgetsResources(widgets))
+            .then(() => WidgetDefinitionsLoader._initWidgets())
+            .catch((e)=>{
+                console.error(e);
+                widgetDefinitions = []; // Clear for next time
+            });
+    }
+
+    static _installWidget(widgetFile, widgetUrl, manager) {
+        var internal = new Internal(manager);
+
+        if (widgetUrl) {
+            console.log('Install widget from url', widgetUrl);
+            return internal.doPut('/widgets/install', {url: widgetUrl});
+        } else {
+            console.log('Install widget from file');
+            return internal.doUpload('/widgets/install', {}, {widget:widgetFile});
+        }
+    }
+
+    static _updateWidget(widgetId, widgetFile, widgetUrl, manager) {
+        var internal = new Internal(manager);
+
+        if (widgetUrl) {
+            console.log('Update widget ' + widgetId + ' from url', widgetUrl);
+            return internal.doPut('/widgets/update',{url: widgetUrl, id: widgetId});
+        } else {
+            console.log('Update widget ' + widgetId + ' from file');
+            return internal.doUpload('/widgets/update',{id: widgetId},{widget:widgetFile});
+        }
+    }
+
+    static install(widgetFile, widgetUrl, manager) {
+        return WidgetDefinitionsLoader._installWidget(widgetFile, widgetUrl, manager)
+            .then(data => WidgetDefinitionsLoader._loadWidget(data, true)
+                .then(() => {
+                    var error = '';
+                    if (_.isEmpty(widgetDefinitions)) {
+                        error = 'Widget not properly initialized. Please check if widget.js is correctly defined.';
+                    } else if (widgetDefinitions.length > 1) {
+                        error = 'Only single widget should be defined within widget.js';
+                    };
+
+                    if (error) {
+                        return WidgetDefinitionsLoader.uninstall(data.id).then(() => { throw new Error(error) });
+                    };
+
+                    return Promise.resolve();
+                })
+                .then(() => WidgetDefinitionsLoader._loadWidgetsResources(_.keyBy([data], 'id'))))
+            .then(() => WidgetDefinitionsLoader._initWidgets())
+            .catch(err => {
+                widgetDefinitions = []; // Clear for next time
+                console.error(err);
+                throw err;
+            })
+    }
+
+    static update(widgetId, widgetFile, widgetUrl, manager) {
+        return WidgetDefinitionsLoader._updateWidget(widgetId, widgetFile, widgetUrl, manager)
+            .then(data => WidgetDefinitionsLoader._loadWidget(data, true)
+                .then(() => WidgetDefinitionsLoader._loadWidgetsResources(_.keyBy([data], 'id'))))
+            .then(() => WidgetDefinitionsLoader._initWidgets())
+            .catch(err => {
+                widgetDefinitions = []; // Clear for next time
+                console.error(err);
+                throw err;
+            })
+    }
+
+    static uninstall(widgetId, manager) {
+        var internal = new Internal(manager);
+        return internal.doDelete(`/widgets/${widgetId}`)
+    }
+
+}
+
+class GenericConfig {
+    static POLLING_TIME_CONFIG = (pollingTime = 0) => {
+        return {id: 'pollingTime',
+                name: 'Refresh time interval',
+                default: pollingTime,
+                placeHolder: 'Enter time interval in seconds',
+                description: 'Data of the widget will be refreshed per provided interval time in seconds',
+                type: BasicComponents.GenericField.NUMBER_TYPE}
+    };
+
+    static PAGE_SIZE_CONFIG = (pageSize = Pagination.PAGE_SIZE_LIST(5)[0]) => {
+        return {id: 'pageSize',
+                default: pageSize,
+                hidden: true}
+    };
+
+    static SORT_COLUMN_CONFIG = (sortColumn) => {
+        return {id: 'sortColumn',
+                default: sortColumn,
+                hidden: true}
+    };
+
+    static SORT_ASCENDING_CONFIG = (sortAscending) => {
+        return {id: 'sortAscending',
+                default: sortAscending,
+                hidden: true}
+    };
+    
+    static get CATEGORY ()  {
+        return {
+            BLUEPRINTS: '模版相关',
+            DEPLOYMENTS: '部署相关',
+            BUTTONS_AND_FILTERS: '按钮和过滤相关',
+            CHARTS_AND_STATISTICS: '图标和统计相关',
+            EXECUTIONS_NODES: '实施和节点相关',
+            SYSTEM_RESOURCES: '系统资源相关',
+            OTHERS: '其他',
+            ALL: '全部'
+        };
+    }
+
+    static get CUSTOM_WIDGET_PERMISSIONS () {
+        return {
+            CUSTOM_ADMIN_ONLY: 'widget_custom_admin',
+            CUSTOM_SYS_ADMIN_ONLY: 'widget_custom_sys_admin',
+            CUSTOM_ALL: 'widget_custom_all'
+        };
+    }
+
+    static WIDGET_PERMISSION = (widgetId) => {
+        return 'widget_'+widgetId
+    }
+}
+

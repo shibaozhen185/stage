@@ -1,0 +1,18 @@
+[
+  "app",
+  "catalog",
+  "blueprints",
+  "deploy",
+  "systemResources",
+  "adminDash",
+  "blueprintManager",
+  "deploy",
+  "vnfPackage",
+  "vim",
+  "vnfmManager",
+  "statistics",
+  "policy",
+  "systemResources-admin",
+  "fault",
+  "tmm"
+]

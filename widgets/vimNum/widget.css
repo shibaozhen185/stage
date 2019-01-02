@@ -1,0 +1,11 @@
+.vim-img img{width:80px;height:40px;margin:0px;vertical-align:middle;}
+.vim-img{height:45px;width:100%; line-height:40px;text-align:center;}
+.vim-num-span{font-size:40px;vertical-align:middle;}
+.vim-num-p{
+		   margin-top: 10px;
+		   height:20px;top:-10px;
+		   line-height:20px;position: relative;
+		   width: 100%;text-align: center;
+		   font-weight: bold;
+		  }
+.vim-div{cursor: pointer;}
